@@ -32,6 +32,6 @@ for fName in fNames :
     txt = p.sub('', txt)
     # print(type(txt))
     # print(txt[-1])
-    txt.lower()
-    print(txt.lower())
+    txt = txt.lower()
+    print(txt)
     print(len(txt))
