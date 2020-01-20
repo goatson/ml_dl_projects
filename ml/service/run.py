@@ -6,7 +6,7 @@ from flask import Flask, render_template, request, jsonify, redirect # ajax와 �
 # from ml.mod import *
 # 언어감지 및 번역 모듈 가져오기
 from ml import detect_lang as dl, transfer_lang
-from db import connection
+from db import insert_trans_log
 # 1. 모듈 가져오기 end -------------------------------------------------------------------------------------
 
 # 2. Flask 객체 생성
@@ -81,11 +81,15 @@ def transfer():
     # 번역
     res = transfer_lang( oriTxt, na)
     # 로그처리
-    oCode = request.form.get('o')
-    tCode = request.form.get('na')
-    oStr = request.form.get('resData.message.result.tarLangType')
-    tStr = request.form.get('resData.message.result.translatedText')
-    connection(oCode, tCode, oStr, tStr)
+    # oCode = request.form.get('resData.message.result.srcLangType')
+    # tCode = request.form.get('resData.message.result.tarLangType')
+    # oStr = request.form.get('resData.message.result.tarLangType')
+    # tStr = request.form.get('o')
+    try : # 접속오류만 가능성 있음
+        insert_trans_log(oCode=na, tCode='ko', oStr=oriTxt, tStr=res["message"]["result"]["translatedText"])
+    except Exception as e:
+        print(e)
+        
     # 응답
     return jsonify(res)
 
